@@ -1,31 +1,40 @@
+#!/usr/bin/env groovy
+
+def gv
+
 pipeline {
     agent any
-	tools {
-		maven 'Maven'
-		}
+    tools {
+        maven 'Maven'
+    }
     stages {
-        stage('Build Jar') {
+        stage("init") {
             steps {
-                script { 
-				echo " building the application"
-				sh "mvn package"
-				}
+                script {
+                    gv = load "script.groovy"
+                }
             }
         }
-		stage('Build Image') {
+        stage("build jar") {
             steps {
-                script { 
-				echo " building the application"
-				sh "docker build -t app:1.0 ."
-				}
+                script {
+                    gv.buildJar()
+                }
             }
-	}	
-		stage('Hello') {
+        }
+        stage("build image") {
             steps {
-		 script {
-		    echo  " deploying applications"
-				}
-			}
-		}
-	    }
-   }
+                script {
+                    gv.buildImage()
+                }
+            }
+        }
+        stage("deploy") {
+            steps {
+                script {
+                    gv.deployApp()
+                }
+            }
+        }
+    }
+}
