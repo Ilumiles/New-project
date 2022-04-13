@@ -12,10 +12,10 @@ pipeline {
 				}
             }
         }
-		stage('Build image') {
+	stage('Build image') {
             steps {
-				script { 
-					echo "building the docker image"
+		script { 
+	        			echo "building the docker image"
 					withCredentials([UsernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
 					sh 'docker build -t ilumiles/my-repo-app:jma-2.0'
 					sh "echo $PASS |docker login -u $USER –password-stdin"
